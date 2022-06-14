@@ -1,0 +1,48 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: mall-dev
+  namespace: dev
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`mall-dev.zhongshihealth.com`)
+      kind: Rule
+      services:
+        - name: web-console
+          port: 80
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: mall-dev-api
+  namespace: dev
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`mall-dev-api.zhongshihealth.com`)
+      kind: Rule
+      services:
+        - name: shop-api-http
+          port: 80
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: mall-dev-service
+  namespace: dev
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`mall-dev-service.zhongshihealth.com`)
+      kind: Rule
+      services:
+        - name: service-api-http
+          port: 80

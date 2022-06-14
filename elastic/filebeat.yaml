@@ -1,0 +1,51 @@
+daemonset:
+  enabled: true
+  # Filebeat 配置
+  filebeatConfig:
+    filebeat.yml: |
+      filebeat:
+        inputs:
+          - type: log
+            enabled: true
+            paths:
+              - /usr/share/extras/zhongshi/dev/service-api/*.log
+            fields:
+              source: dev-service-api
+          - type: log
+            enabled: true
+            paths:
+              - /usr/share/extras/zhongshi/dev/shop-api/*.log
+            fields:
+              source: dev-shop-api
+      processors:
+      - timestamp:
+          # 格式化时间值给时间戳
+          field: time
+          # 使用我国东八区时间  格式化log时间
+          timezone: Asia/Shanghai
+          layouts:
+            - '2006-01-02 15:04:05'
+            - '2006-01-02 15:04:05.999'
+          test:
+            - '2019-06-22 16:33:51'
+      output:
+        elasticsearch:
+          hosts: ["http://elasticsearch-client:9200"]
+          username: "elastic"
+          password: "1qT8L8DMh92KUw=="
+          indices:
+            - index: "%{[fields.source]}"
+  # Pod 部署在 node1 节点上
+  nodeSelector:
+    kubernetes.io/hostname: node1
+  extraVolumes:
+    - name: filebeat-logs
+      persistentVolumeClaim:
+        claimName: filebeat-logs
+  extraVolumeMounts:
+    - name: filebeat-logs
+      mountPath: /usr/share/extras/zhongshi
+      readOnly: true
+# 指定镜像及tag
+image: "docker.elastic.co/beats/filebeat"
+imageTag: "7.15.0"

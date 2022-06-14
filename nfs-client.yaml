@@ -1,0 +1,5 @@
+nfs:
+  server: "192.168.118.74"    # This is the server IP address. Replace it with your own.
+  path: "/data/nfs/k8s"    # Replace the exported directory with your own.
+storageClass:
+  defaultClass: true

@@ -1,0 +1,11 @@
+ports:
+  traefik:
+    expose: true
+    nodePort: 30090
+  web:
+    nodePort: 30026
+  websecure:
+    nodePort: 30443
+service:
+  enabled: true
+  type: NodePort
